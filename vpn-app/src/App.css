@@ -1,0 +1,63 @@
+/* Переменные для удобства (Цвета темы) */
+:root {
+  --bg-color: #0f172a;
+  --accent-color: #2563eb;
+  --text-primary: #ffffff;
+  --text-secondary: #94a3b8;
+  --card-bg: #1e293b;
+}
+
+.app-container {
+  min-height: 100vh;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+}
+
+/* Стили для навигации */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--accent-color);
+}
+
+/* Стили для сетки тарифов */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 4rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.card {
+  background: var(--card-bg);
+  padding: 2rem;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  border-color: var(--accent-color);
+}
+
+.btn-primary {
+  background-color: var(--accent-color);
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
