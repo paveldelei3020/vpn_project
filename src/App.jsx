@@ -15,7 +15,6 @@ function App() {
         </div>
       </nav>
 
-      {/* --- ГЛАВНАЯ --- */}
       <header className="hero">
         <div className="status-badge">● Твой узел активен</div>
         <h1>Твой интернет — твои правила</h1>
@@ -28,7 +27,6 @@ function App() {
         </div>
       </header>
 
-      {/* --- КАК ЭТО РАБОТАЕТ (Добавляем "воды" и визуала) --- */}
       <section className="how-it-works">
         <h2>Почему GEN-Z?</h2>
         <div className="steps-container">
@@ -50,7 +48,6 @@ function App() {
         </div>
       </section>
 
-      {/* --- ТАРИФЫ (Теперь это полноценная секция) --- */}
       <section className="pricing" id="categories">
         <h2>Выбери свой план</h2>
         <div className="price-grid">
@@ -86,7 +83,6 @@ function App() {
         </div>
       </section>
 
-      {/* --- ПРЕИМУЩЕСТВА (Твои старые карточки) --- */}
       <section className="features">
         <div className="feature-card">
           <div className="icon">🚀</div>
@@ -105,7 +101,6 @@ function App() {
         </div>
       </section>
 
-      {/* --- ФУТЕР --- */}
       <footer className="footer">
         <div className="logo">GEN-Z<span>VPN</span></div>
         <p>© 2026 Свобода в каждом байте.</p>
