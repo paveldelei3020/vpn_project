@@ -14,15 +14,15 @@ function App() {
       </nav>
 
       <main className="hero">
-        <div className="status-badge">● Система защищена</div>
-        <h1>Твоя анонимность — наш приоритет</h1>
-        <p>Шифрование военного уровня и 0% логов. Подключайся в один клик.</p>
-        
-        <div className="main-action">
-          <div className="power-button">
-            <div className="power-icon">🔌</div>
-          </div>
-          <p>Нажми, чтобы защитить соединение</p>
+        <div className="status-badge">● Твой узел активен</div>
+          <h1>Твой интернет — твои правила</h1>
+          <p>Обходи любые фильтры, забудь про лаги и оставайся невидимкой. GEN-Z VPN — это свобода без компромиссов.</p>
+          
+          <div className="main-action">
+            <div className="power-button">
+              <div className="power-icon">⚡</div>
+            </div>
+          <p>Нажми, чтобы войти в сеть</p>
         </div>
       </main>
 
