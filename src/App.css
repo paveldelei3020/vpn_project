@@ -1,11 +1,15 @@
+/* --- Импорт шрифтов --- */
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;500;800&display=swap');
 
+/* --- Глобальные переменные --- */
 :root {
   --bg-dark: #0f172a;
-  --bg-card: #1e293b;
+  --bg-card: rgba(30, 41, 59, 0.5);
   --accent: #38bdf8;
+  --accent-glow: rgba(56, 189, 248, 0.4);
   --text-main: #f8fafc;
   --text-dim: #94a3b8;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body {
@@ -22,12 +26,15 @@ body {
               radial-gradient(circle at bottom left, #0f172a 0%, transparent 30%);
 }
 
-/* --- Навигация --- */
 .navbar {
   display: flex;
   justify-content: space-between;
-  padding: 2rem 10%;
+  padding: 1.5rem 10%;
   align-items: center;
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .logo {
@@ -41,35 +48,37 @@ body {
 .logo span {
   margin-left: 5px;
   color: var(--accent);
-  text-shadow: 0 0 10px var(--accent), 0 0 20px #0ea5e9;
-  font-size: 1.4rem;
-  vertical-align: middle;
+  text-shadow: 0 0 10px var(--accent);
 }
 
-/* --- Главная секция (Hero) --- */
+.nav-actions {
+  display: flex;
+  gap: 1rem;
+}
+
 .hero {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 60px 10%;
+  padding: 100px 10%;
 }
 
 .status-badge {
   background: rgba(56, 189, 248, 0.1);
   color: var(--accent);
-  padding: 8px 16px;
-  border-radius: 20px;
-  display: inline-block;
+  padding: 8px 18px;
+  border-radius: 50px;
   margin-bottom: 2rem;
-  font-size: 0.9rem;
-  border: 1px solid rgba(56, 189, 248, 0.3);
+  font-size: 0.85rem;
   font-weight: 500;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  letter-spacing: 1px;
 }
 
 h1 {
-  font-size: 3.5rem;
+  font-size: clamp(2.5rem, 8vw, 4rem);
   font-weight: 800;
   margin-bottom: 1.5rem;
   max-width: 900px;
@@ -82,114 +91,259 @@ h1 {
 .hero p {
   font-size: 1.2rem;
   color: var(--text-dim);
-  max-width: 650px;
-  margin-bottom: 3rem;
+  max-width: 600px;
+  margin-bottom: 3.5rem;
   line-height: 1.6;
 }
 
-/* --- Кнопка включения --- */
 .main-action {
+  margin-top: 20px;
+}
+
+.buy-button {
+  background: linear-gradient(135deg, var(--accent) 0%, #0ea5e9 100%);
+  color: #0f172a;
+  border: none;
+  padding: 22px 60px;
+  border-radius: 18px;
+  font-size: 1.4rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 10px 40px var(--accent-glow);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
-}
-
-.power-button {
-  width: 130px;
-  height: 130px;
-  background: var(--bg-card);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 3.5rem;
-  cursor: pointer;
-  border: 4px solid #334155;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-
-.power-button:hover {
-  border-color: var(--accent);
-  box-shadow: 0 0 40px rgba(56, 189, 248, 0.3);
-  transform: translateY(-5px);
-}
-
-.power-button:active {
-  transform: scale(0.92);
-  box-shadow: 0 0 15px var(--accent);
-}
-
-.main-action p {
-  font-size: 0.85rem;
+  gap: 4px;
+  font-family: 'Orbitron', sans-serif;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  color: var(--accent);
-  margin-top: 10px;
+  letter-spacing: 1px;
 }
 
-/* --- Преимущества --- */
+.buy-button span {
+  font-size: 0.75rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  text-transform: none;
+  opacity: 0.9;
+  letter-spacing: 0;
+}
+
+.buy-button:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 50px rgba(56, 189, 248, 0.6);
+  filter: brightness(1.1);
+}
+
+.buy-button:active {
+  transform: translateY(-2px) scale(0.98);
+}
+
 .features {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
-  padding: 4rem 10%;
+  padding: 4rem 10% 8rem;
 }
 
 .feature-card {
-  background: rgba(30, 41, 59, 0.4);
+  background: var(--bg-card);
   padding: 2.5rem;
-  border-radius: 1.5rem;
-  border: 1px solid rgba(255,255,255,0.05);
-  backdrop-filter: blur(12px);
-  transition: all 0.3s ease;
+  border-radius: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(15px);
+  transition: var(--transition);
   text-align: left;
 }
 
 .feature-card:hover {
   transform: translateY(-10px);
-  border-color: var(--accent);
-  background: rgba(30, 41, 59, 0.6);
+  border-color: rgba(56, 189, 248, 0.4);
+  background: rgba(30, 41, 59, 0.7);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
 .feature-card .icon {
-  font-size: 2rem;
-  margin-bottom: 1rem;
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  display: block;
 }
 
 .feature-card h3 {
-  margin: 0.5rem 0;
-  font-size: 1.3rem;
+  margin: 0 0 10px 0;
+  font-size: 1.4rem;
+  color: #fff;
 }
 
 .feature-card p {
   color: var(--text-dim);
-  font-size: 0.95rem;
-  line-height: 1.5;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
 }
 
-/* --- Общие кнопки --- */
 .btn-primary {
-  background: var(--accent);
-  color: #0f172a;
-  border: none;
-  padding: 12px 28px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 10px 24px;
   border-radius: 12px;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: var(--transition);
 }
 
 .btn-primary:hover {
-  opacity: 0.9;
+  background: #fff;
+  color: #000;
 }
 
 .btn-ghost {
   background: transparent;
-  color: var(--text-main);
+  color: var(--text-dim);
   border: none;
-  margin-right: 1.5rem;
   cursor: pointer;
   font-weight: 500;
+  transition: var(--transition);
+}
+
+.btn-ghost:hover {
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  h1 { font-size: 2.5rem; }
+  .navbar { padding: 1.5rem 5%; }
+  .buy-button { width: 100%; padding: 20px; }
+}
+
+/* Стили для новых секций */
+.how-it-works, .pricing {
+  padding: 100px 10%;
+  text-align: center;
+}
+
+h2 {
+  font-size: 2.5rem;
+  font-family: 'Orbitron', sans-serif;
+  margin-bottom: 4rem;
+}
+
+/* Шаги */
+.steps-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 3rem;
+}
+
+.step {
+  text-align: left;
+}
+
+.step-num {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 3rem;
+  font-weight: 800;
+  color: rgba(56, 189, 248, 0.2);
+  display: block;
+  margin-bottom: -20px;
+}
+
+.step h4 {
+  font-size: 1.3rem;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+
+  .price-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.price-card {
+  background: rgba(30, 41, 59, 0.3);
+  padding: 3rem 2rem;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: transform 0.3s ease;
+  position: relative;
+}
+
+.price-card.featured {
+  background: rgba(56, 189, 248, 0.05);
+  border: 1px solid var(--accent);
+  transform: scale(1.05);
+}
+
+.popular-tag {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: #000;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-weight: 800;
+  font-size: 0.8rem;
+}
+
+.price {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin: 1.5rem 0;
+}
+
+.price span {
+  font-size: 1rem;
+  color: var(--text-dim);
+}
+
+.price-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0;
+  color: var(--text-dim);
+  text-align: left;
+}
+
+.price-card ul li {
+  margin-bottom: 10px;
+}
+
+.price-card ul li::before {
+  content: "✓";
+  color: var(--accent);
+  margin-right: 10px;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 12px 30px;
+  border-radius: 10px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.btn-primary-alt {
+  background: var(--accent);
+  color: #000;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 10px;
+  width: 100%;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.footer {
+  padding: 60px 10%;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--text-dim);
 }
