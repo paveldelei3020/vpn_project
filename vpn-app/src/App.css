@@ -1,63 +1,125 @@
-/* Переменные для удобства (Цвета темы) */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;500&display=swap');
+
 :root {
-  --bg-color: #0f172a;
-  --accent-color: #2563eb;
-  --text-primary: #ffffff;
-  --text-secondary: #94a3b8;
-  --card-bg: #1e293b;
+  --bg-dark: #0f172a;
+  --bg-card: #1e293b;
+  --accent: #38bdf8;
+  --text-main: #f8fafc;
+  --text-dim: #94a3b8;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: 'Inter', sans-serif;
 }
 
 .app-container {
   min-height: 100vh;
-  background-color: var(--bg-color);
-  color: var(--text-primary);
-  font-family: 'Inter', sans-serif;
+  background: radial-gradient(circle at top right, #1e3a8a 0%, transparent 40%),
+              radial-gradient(circle at bottom left, #0f172a 0%, transparent 30%);
 }
 
-/* Стили для навигации */
 .navbar {
   display: flex;
   justify-content: space-between;
+  padding: 2rem 10%;
   align-items: center;
-  padding: 1.5rem 2rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .logo {
+  font-family: 'Orbitron', sans-serif;
   font-size: 1.5rem;
-  font-weight: bold;
-  color: var(--accent-color);
+  letter-spacing: 2px;
 }
 
-/* Стили для сетки тарифов */
-.pricing-grid {
+.logo span {
+  color: var(--accent);
+  text-shadow: 0 0 10px var(--accent);
+}
+
+.hero {
+  text-align: center;
+  padding: 80px 10%;
+}
+
+.status-badge {
+  background: rgba(56, 189, 248, 0.1);
+  color: var(--accent);
+  padding: 8px 16px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+h1 {
+  font-size: 3.5rem;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(to right, #fff, var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.power-button {
+  width: 120px;
+  height: 120px;
+  background: var(--bg-card);
+  border-radius: 50%;
+  margin: 40px auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  cursor: pointer;
+  border: 4px solid #334155;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+.power-button:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 40px rgba(56, 189, 248, 0.4);
+  transform: translateY(-5px);
+}
+
+.features {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 2rem;
-  padding: 4rem 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
+  padding: 4rem 10%;
 }
 
-.card {
-  background: var(--card-bg);
+.feature-card {
+  background: rgba(30, 41, 59, 0.5);
   padding: 2rem;
   border-radius: 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  transition: transform 0.3s ease;
+  border: 1px solid rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  transition: transform 0.3s;
 }
 
-.card:hover {
+.feature-card:hover {
   transform: translateY(-10px);
-  border-color: var(--accent-color);
+  border-color: var(--accent);
 }
 
 .btn-primary {
-  background-color: var(--accent-color);
-  color: white;
-  padding: 0.8rem 1.5rem;
-  border-radius: 0.5rem;
+  background: var(--accent);
+  color: #000;
   border: none;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: bold;
   cursor: pointer;
-  font-weight: 600;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-main);
+  border: none;
+  margin-right: 1.5rem;
+  cursor: pointer;
 }
