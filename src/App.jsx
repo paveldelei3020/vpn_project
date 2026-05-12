@@ -48,33 +48,39 @@ function App() {
         </div>
       </section>
 
-      <section className="pricing" id="pricing">
-        <h2>Выбери свой тариф</h2>
-        <div className="price-grid">
-          <div className="price-card">
-            <h3>Пробный</h3>
-            <div className="price">0 ₽<span>/3 дня</span></div>
-            <ul>
+      <section className="pricing-section" id="pricing">
+        <h2 className="pricing-title">Выбери свой тариф</h2>
+        
+        <div className="pricing-grid">
+          {/* Пробный тариф */}
+          <div className="price-card fade-in" style={{ animationDelay: '0.1s' }}>
+            <h3 className="plan-name">Пробный</h3>
+            <div className="price-tag">0 ₽<span>/3 дня</span></div>
+            <ul className="features-list">
               <li>Все локации</li>
               <li>Скорость до 100 Мбит</li>
             </ul>
             <button className="btn-outline">Попробовать</button>
           </div>
-          <div className="price-card featured">
-            <div className="popular-tag">TOP</div>
-            <h3>Годовой</h3>
-            <div className="price">199 ₽<span>/мес</span></div>
-            <ul>
+          
+          {/* Годовой тариф (Центральный) */}
+          <div className="price-card featured fade-in" style={{ animationDelay: '0.2s' }}>
+            <div className="top-badge pulse">TOP</div>
+            <h3 className="plan-name">Годовой</h3>
+            <div className="price-tag">199 ₽<span>/мес</span></div>
+            <ul className="features-list">
               <li>Безлимитная скорость</li>
               <li>5 устройств сразу</li>
               <li>Приоритетный пинг</li>
             </ul>
-            <button className="btn-primary-alt">Выбрать план</button>
+            <button className="btn-solid">Выбрать план</button>
           </div>
-          <div className="price-card">
-            <h3>Месячный</h3>
-            <div className="price">349 ₽<span>/мес</span></div>
-            <ul>
+          
+          {/* Месячный тариф */}
+          <div className="price-card fade-in" style={{ animationDelay: '0.3s' }}>
+            <h3 className="plan-name">Месячный</h3>
+            <div className="price-tag">349 ₽<span>/мес</span></div>
+            <ul className="features-list">
               <li>Безлимитная скорость</li>
               <li>Все сервера</li>
             </ul>

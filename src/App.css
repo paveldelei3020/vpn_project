@@ -258,3 +258,179 @@ h1 {
   border-top: 1px solid rgba(255,255,255,0.05); 
   margin-top: 50px; 
 }
+
+/* --- СЕКЦИЯ ТАРИФОВ --- */
+.pricing-section {
+  padding: 80px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pricing-title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 40px;
+  color: #fff;
+}
+
+.pricing-grid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap; /* Чтобы на телефонах переносилось на новую строку */
+  max-width: 1100px;
+  width: 100%;
+}
+
+/* Карточка тарифа */
+.price-card {
+  background: #151c2f; /* Темно-синий фон как на макете */
+  border-radius: 20px;
+  padding: 40px 30px;
+  width: 320px;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid transparent; /* Подготовка для hover */
+}
+
+/* Эффект при наведении */
+.price-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Выделенная карточка (Годовой) */
+.price-card.featured {
+  border: 1px solid #38bdf8;
+  height: 430px; /* Чуть выше остальных */
+  padding-top: 50px; /* Сдвигаем контент вниз из-за плашки TOP */
+}
+
+.price-card.featured:hover {
+  box-shadow: 0 15px 40px rgba(56, 189, 248, 0.15);
+}
+
+/* Плашка TOP */
+.top-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #38bdf8;
+  color: #0f172a;
+  padding: 4px 20px;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+/* Тексты внутри карточки */
+.plan-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+.price-tag {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 30px;
+}
+
+.price-tag span {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+/* Список преимуществ */
+.features-list {
+  list-style: none;
+  margin-bottom: 40px;
+  flex-grow: 1; /* Прижимает кнопку к низу карточки */
+}
+
+.features-list li {
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+  color: #e2e8f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Точки перед текстом как на скрине */
+.features-list li::before {
+  content: "•";
+  margin-right: 8px;
+  font-size: 1.2rem;
+}
+
+/* Кнопки в тарифах */
+.btn-outline {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 15px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+  width: 100%;
+}
+
+.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.btn-solid {
+  background: #38bdf8;
+  border: none;
+  color: #0f172a;
+  padding: 15px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+  width: 100%;
+}
+
+.btn-solid:hover {
+  background: #7dd3fc;
+}
+
+/* --- АНИМАЦИИ --- */
+.fade-in {
+  opacity: 0;
+  animation: fadeInUp 0.8s forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pulse {
+  animation: pulseGlow 2s infinite;
+}
+
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.6); }
+  70% { box-shadow: 0 0 0 10px rgba(56, 189, 248, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0); }
+} 
