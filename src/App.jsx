@@ -3,7 +3,7 @@ import { useVPN } from './useVPN';
 import './App.css';
 
 function App() {
-  const { handleBuyClick } = useVPN();
+  const { isProfileOpen, toggleProfile, handleBuyClick, userData } = useVPN();
 
   return (
     <div className="app-container">
@@ -11,7 +11,7 @@ function App() {
         <div className="logo">GEN-Z<span>VPN</span></div>
         <div className="nav-actions">
           <button className="btn-ghost" onClick={handleBuyClick}>Тарифы</button>
-          <button className="btn-primary">Личный кабинет</button>
+          <button className="btn-primary" onClick={toggleProfile}>Личный кабинет</button>
         </div>
       </nav>
 
@@ -33,23 +33,23 @@ function App() {
           <div className="step">
             <span className="step-num">01</span>
             <h4>Шифрование военного уровня</h4>
-            <p>Мы используем протоколы WireGuard, которые невозможно взломать перебором. Твой трафик превращается в хаос для провайдера.</p>
+            <p>Протоколы WireGuard, которые невозможно взломать. Твой трафик — твоя тайна.</p>
           </div>
           <div className="step">
             <span className="step-num">02</span>
             <h4>Никаких следов</h4>
-            <p>Наши сервера работают на RAM-дисках. Это значит, что при любой перезагрузке все данные стираются физически.</p>
+            <p>Сервера на RAM-дисках удаляют все данные при каждой перезагрузке.</p>
           </div>
           <div className="step">
             <span className="step-num">03</span>
             <h4>Смарт-роутинг</h4>
-            <p>Система сама выбирает кратчайший путь до игровых серверов или стримингов, чтобы пинг был минимальным.</p>
+            <p>Автоматический подбор узла для минимального пинга в играх и кино.</p>
           </div>
         </div>
       </section>
 
-      <section className="pricing" id="categories">
-        <h2>Выбери свой план</h2>
+      <section className="pricing" id="pricing">
+        <h2>Выбери свой тариф</h2>
         <div className="price-grid">
           <div className="price-card">
             <h3>Пробный</h3>
@@ -61,13 +61,13 @@ function App() {
             <button className="btn-outline">Попробовать</button>
           </div>
           <div className="price-card featured">
-            <div className="popular-tag">Популярно</div>
+            <div className="popular-tag">TOP</div>
             <h3>Годовой</h3>
             <div className="price">199 ₽<span>/мес</span></div>
             <ul>
               <li>Безлимитная скорость</li>
               <li>5 устройств сразу</li>
-              <li>Приоритетная поддержка</li>
+              <li>Приоритетный пинг</li>
             </ul>
             <button className="btn-primary-alt">Выбрать план</button>
           </div>
@@ -83,28 +83,41 @@ function App() {
         </div>
       </section>
 
-      <section className="features">
-        <div className="feature-card">
-          <div className="icon">🚀</div>
-          <h3>Ultra Speed</h3>
-          <p>До 10 Гбит/с без задержек</p>
-        </div>
-        <div className="feature-card">
-          <div className="icon">🌍</div>
-          <h3>50+ Стран</h3>
-          <p>Любой контент доступен</p>
-        </div>
-        <div className="feature-card">
-          <div className="icon">🔒</div>
-          <h3>No Logs</h3>
-          <p>Мы не храним данные</p>
-        </div>
-      </section>
-
       <footer className="footer">
         <div className="logo">GEN-Z<span>VPN</span></div>
         <p>© 2026 Свобода в каждом байте.</p>
       </footer>
+
+      {isProfileOpen && (
+        <div className="modal-overlay" onClick={toggleProfile}>
+          <div className="profile-modal" onClick={e => e.stopPropagation()}>
+            <div className="profile-header">
+              <div className="avatar">👤</div>
+              <h3>{userData.name}</h3>
+              <p className="user-status">{userData.status}</p>
+              <button className="close-btn" onClick={toggleProfile}>&times;</button>
+            </div>
+            <div className="profile-body">
+              <div className="info-item">
+                <span>Email:</span>
+                <p>{userData.email}</p>
+              </div>
+              <div className="info-item">
+                <span>Баланс:</span>
+                <p className="highlight">{userData.balance}</p>
+              </div>
+              <div className="info-item">
+                <span>Подписка:</span>
+                <p>{userData.daysLeft} дн.</p>
+              </div>
+            </div>
+            <div className="profile-footer">
+              <button className="btn-primary-alt">Пополнить</button>
+              <button className="btn-ghost" style={{marginTop: '10px'}}>Выйти</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
