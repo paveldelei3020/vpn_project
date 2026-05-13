@@ -49,3 +49,16 @@ help:
 	@echo "  make push m='msg' - Добавить все файлы, закоммитить и отправить в Git"
 	@echo "  make clean    - Удалить зависимости и сборку"
 	@echo "  make info     - Показать версии установленного ПО"
+	@echo "  make lint     - Проверить код на ошибки"
+	@echo "  make lint-fix - Исправить все возможные ошибки стиля"
+
+	
+	.PHONY: lint lint-fix
+
+# Быстрый просмотр ошибок и предупреждений ESLint
+lint:
+	npx eslint "src/**/*.{js,jsx}"
+
+# Автоматическое исправление всех возможных ошибок стиля
+lint-fix:
+	npx eslint "src/**/*.{js,jsx}" --fix
