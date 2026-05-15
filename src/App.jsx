@@ -33,7 +33,6 @@ function App() {
 
   return (
     <div className="app-container">
-      {/* Шапка общая для всех страниц */}
       <nav className="navbar">
         <div className="logo" onClick={() => navigateTo('home')} style={{cursor: 'pointer'}}>
           GEN-Z<span>VPN</span>
@@ -68,7 +67,6 @@ function App() {
                 <div className="menu-group">
                   <button className="menu-item">👤 Profile</button>
                   <button className="menu-item">⚙️ Settings</button>
-                  {/* Кнопка перехода в меню */}
                   <button className="menu-item" onClick={() => navigateTo('updates')}>
                     🚀 Changelog
                   </button>
@@ -91,7 +89,6 @@ function App() {
         </div>
       </nav>
 
-      {/* Контент меняется в зависимости от currentPage */}
       <main className="fade-in">
         {currentPage === 'home' ? (
           <>

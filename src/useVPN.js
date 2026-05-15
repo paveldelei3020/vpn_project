@@ -3,17 +3,15 @@ import { useState } from 'react';
 export const useVPN = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [loadingPlan, setLoadingPlan] = useState(null);
-  // Состояние текущей страницы
   const [currentPage, setCurrentPage] = useState('home'); 
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
 
-  // Функция навигации
   const navigateTo = (page) => {
     setCurrentPage(page);
-    window.scrollTo(0, 0); // Всегда возвращаемся в начало страницы при переходе
-    closeMenu(); // Закрываем меню при переходе
+    window.scrollTo(0, 0); 
+    closeMenu(); 
   };
 
   const handlePlanClick = (planName) => {
