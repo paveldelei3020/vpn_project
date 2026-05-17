@@ -56,6 +56,7 @@ export const useVPN = () => {
     toggleMenu,
     closeMenu,
     loadingPlan,
+    setLoadingPlan, 
     handlePlanClick,
     userData,
     news,

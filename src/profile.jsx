@@ -5,7 +5,6 @@ function Profile({ userEmail, navigateTo }) {
   const [balance, setBalance] = useState(0);
   const [subscription, setSubscription] = useState('Загрузка...');
 
-  // Функция загрузки актуальных данных из PostgreSQL
   const fetchProfileFromDB = async () => {
     if (!userEmail) return;
     try {
@@ -24,7 +23,6 @@ function Profile({ userEmail, navigateTo }) {
   useEffect(() => {
     fetchProfileFromDB();
 
-    // Слушаем сигналы о пополнении баланса или смене подписки с главной страницы
     window.addEventListener('balanceUpdated', fetchProfileFromDB);
     window.addEventListener('subscriptionUpdated', fetchProfileFromDB);
 
@@ -34,7 +32,6 @@ function Profile({ userEmail, navigateTo }) {
     };
   }, [userEmail]);
 
-  // Функция пополнения кошелька в БД
   const handleAddMoney = async (amount) => {
     try {
       const response = await fetch('http://localhost:5000/update-balance', {
@@ -45,10 +42,9 @@ function Profile({ userEmail, navigateTo }) {
       const data = await response.json();
 
       if (response.ok) {
-        setBalance(data.balance); // Ставим баланс, который вернула БД
-        setSubscription(data.subscription); // Обновляем подписку на всякий случай
+        setBalance(data.balance);
+        setSubscription(data.subscription);
         
-        // Оповещаем App.jsx (шапку сайта), чтобы там тоже изменился баланс
         window.dispatchEvent(new Event('balanceUpdated'));
       } else {
         alert(data.message);

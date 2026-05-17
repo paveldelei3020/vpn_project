@@ -22,7 +22,6 @@ function App() {
   const [userEmail, setUserEmail] = useState(null);
   const [userBalance, setUserBalance] = useState(0);
 
-  // Получаем баланс из PostgreSQL через бэкенд
   const fetchBalanceFromDB = async (email) => {
     if (!email) return;
     try {
@@ -43,7 +42,6 @@ function App() {
       fetchBalanceFromDB(savedEmail);
     }
 
-    // Слушаем событие, если баланс пополнили на странице профиля
     const handleBalanceChange = () => fetchBalanceFromDB(localStorage.getItem('userEmail'));
     window.addEventListener('balanceUpdated', handleBalanceChange);
     return () => window.removeEventListener('balanceUpdated', handleBalanceChange);
@@ -64,7 +62,6 @@ function App() {
     navigateTo('home');
   };
 
-  // --- ЛОГИКА ОПЛАТЫ ЧЕРЕЗ БАЗУ ДАННЫХ ---
   const purchasePlan = async (planName, price) => {
     if (!userEmail) {
       alert('Сначала войдите в аккаунт, чтобы приобрести тариф!');
@@ -72,7 +69,6 @@ function App() {
       return;
     }
 
-    // Проверяем баланс перед отправкой запроса
     if (userBalance < price) {
       alert(`Недостаточно средств! Стоимость: ${price} ₽. Ваш баланс в БД: ${userBalance} ₽.`);
       navigateTo('profile');
@@ -87,7 +83,7 @@ function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           email: userEmail, 
-          amount: -Number(price), // Явно приводим цену к числу со знаком минус
+          amount: -Number(price),
           planName: planName 
         })
       });
@@ -95,10 +91,9 @@ function App() {
       const data = await response.json();
 
       if (response.ok) {
-        setUserBalance(data.balance); // Обновляем баланс в шапке сайта
+        setUserBalance(data.balance);
         alert(`🎉 Успешно! Вы приобрели тариф "${planName}". Списано: ${price} ₽.`);
         
-        // Генерируем события, чтобы все компоненты (включая Profile.jsx) мгновенно обновили данные
         window.dispatchEvent(new Event('balanceUpdated'));
         window.dispatchEvent(new Event('subscriptionUpdated'));
       } else {
@@ -208,11 +203,9 @@ function App() {
               <h2 className="section-title">Выбери свой тариф</h2>
               <div className="pricing-grid">
                 
-                {/* КАРТОЧКА: ПРОБНЫЙ - 0 ₽ */}
                 <div className="price-card-v2">
                   <h3 className="card-plan-title">Пробный</h3>
                   <div className="card-price">0 ₽<span>/3 дня</span></div>
-                  {/* МЕНЯЕМ handlePlanClick на purchasePlan */}
                   <button 
                     className={`card-btn-outline ${loadingPlan === 'Пробный' ? 'loading' : ''}`} 
                     onClick={() => purchasePlan('Пробный', 0)}
@@ -221,12 +214,10 @@ function App() {
                   </button>
                 </div>
 
-                {/* КАРТОЧКА: ГОДОВОЙ - 199 ₽ */}
                 <div className="price-card-v2 featured">
                   <div className="badge-top pulse">TOP</div>
                   <h3 className="card-plan-title">Годовой</h3>
                   <div className="card-price">199 ₽<span>/мес</span></div>
-                  {/* МЕНЯЕМ handlePlanClick на purchasePlan */}
                   <button 
                     className={`card-btn-solid ${loadingPlan === 'Годовой' ? 'loading' : ''}`} 
                     onClick={() => purchasePlan('Годовой', 199)}
@@ -235,11 +226,9 @@ function App() {
                   </button>
                 </div>
 
-                {/* КАРТОЧКА: МЕСЯЧНЫЙ - 349 ₽ */}
                 <div className="price-card-v2">
                   <h3 className="card-plan-title">Месячный</h3>
                   <div className="card-price">349 ₽<span>/мес</span></div>
-                  {/* МЕНЯЕМ handlePlanClick на purchasePlan */}
                   <button 
                     className={`card-btn-outline ${loadingPlan === 'Месячный' ? 'loading' : ''}`} 
                     onClick={() => purchasePlan('Месячный', 349)}
