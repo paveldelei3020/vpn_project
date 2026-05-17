@@ -1,6 +1,8 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useVPN } from './useVPN';
 import Updates from './Updates';
+import Auth from './Auth'; 
+import Profile from './profile'; 
 import './App.css';
 
 function App() {
@@ -11,13 +13,104 @@ function App() {
     toggleMenu, 
     closeMenu, 
     loadingPlan, 
-    handlePlanClick, 
-    userData, 
+    setLoadingPlan,
     news, 
     changelog 
   } = useVPN();
   
   const menuRef = useRef(null);
+  const [userEmail, setUserEmail] = useState(null);
+  const [userBalance, setUserBalance] = useState(0);
+
+  // Получаем баланс из PostgreSQL через бэкенд
+  const fetchBalanceFromDB = async (email) => {
+    if (!email) return;
+    try {
+      const response = await fetch(`http://localhost:5000/get-profile?email=${email}`);
+      const data = await response.json();
+      if (response.ok) {
+        setUserBalance(data.balance);
+      }
+    } catch (error) {
+      console.error('Ошибка сети при получении баланса:', error);
+    }
+  };
+
+  useEffect(() => {
+    const savedEmail = localStorage.getItem('userEmail');
+    if (savedEmail) {
+      setUserEmail(savedEmail);
+      fetchBalanceFromDB(savedEmail);
+    }
+
+    // Слушаем событие, если баланс пополнили на странице профиля
+    const handleBalanceChange = () => fetchBalanceFromDB(localStorage.getItem('userEmail'));
+    window.addEventListener('balanceUpdated', handleBalanceChange);
+    return () => window.removeEventListener('balanceUpdated', handleBalanceChange);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('userEmail');
+    setUserEmail(null);
+    setUserBalance(0);
+    navigateTo('home');
+    closeMenu();
+  };
+
+  const handleAuthSuccess = () => {
+    const email = localStorage.getItem('userEmail');
+    setUserEmail(email);
+    fetchBalanceFromDB(email);
+    navigateTo('home');
+  };
+
+  // --- ЛОГИКА ОПЛАТЫ ЧЕРЕЗ БАЗУ ДАННЫХ ---
+  const purchasePlan = async (planName, price) => {
+    if (!userEmail) {
+      alert('Сначала войдите в аккаунт, чтобы приобрести тариф!');
+      navigateTo('auth');
+      return;
+    }
+
+    // Проверяем баланс перед отправкой запроса
+    if (userBalance < price) {
+      alert(`Недостаточно средств! Стоимость: ${price} ₽. Ваш баланс в БД: ${userBalance} ₽.`);
+      navigateTo('profile');
+      return;
+    }
+
+    setLoadingPlan(planName);
+
+    try {
+      const response = await fetch('http://localhost:5000/update-balance', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          email: userEmail, 
+          amount: -Number(price), // Явно приводим цену к числу со знаком минус
+          planName: planName 
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setUserBalance(data.balance); // Обновляем баланс в шапке сайта
+        alert(`🎉 Успешно! Вы приобрели тариф "${planName}". Списано: ${price} ₽.`);
+        
+        // Генерируем события, чтобы все компоненты (включая Profile.jsx) мгновенно обновили данные
+        window.dispatchEvent(new Event('balanceUpdated'));
+        window.dispatchEvent(new Event('subscriptionUpdated'));
+      } else {
+        alert(data.message || 'Ошибка при покупке тарифа');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Ошибка соединения с сервером при оплате');
+    } finally {
+      setLoadingPlan(null);
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -34,7 +127,7 @@ function App() {
   return (
     <div className="app-container">
       <nav className="navbar">
-        <div className="logo" onClick={() => navigateTo('home')} style={{cursor: 'pointer'}}>
+        <div className="logo logo-clickable" onClick={() => navigateTo('home')}>
           GEN-Z<span>VPN</span>
         </div>
         <div className="nav-actions">
@@ -45,56 +138,66 @@ function App() {
             Обновления
           </button>
           
-          <div className="dropdown-wrapper" ref={menuRef}>
-            <button className={`dots-btn ${isMenuOpen ? 'active' : ''}`} onClick={toggleMenu}>
-              <span className="dot"></span>
-              <span className="dot"></span>
-              <span className="dot"></span>
-            </button>
+          {userEmail ? (
+            <div className="dropdown-wrapper" ref={menuRef}>
+              <button className={`dots-btn ${isMenuOpen ? 'active' : ''}`} onClick={toggleMenu}>
+                <span className="dot"></span>
+                <span className="dot"></span>
+                <span className="dot"></span>
+              </button>
 
-            {isMenuOpen && (
-              <div className="github-style-menu">
-                <div className="menu-header">
-                  <div className="user-info-box">
-                    <div className="avatar-circle">GZ</div>
-                    <div className="user-details">
-                      <span className="user-login">{userData.name}</span>
-                      <span className="set-status">😊 Set status</span>
+              {isMenuOpen && (
+                <div className="github-style-menu">
+                  <div className="menu-header">
+                    <div className="user-info-box">
+                      <div className="avatar-circle">GZ</div>
+                      <div className="user-details">
+                        <span className="user-login">{userEmail}</span>
+                        <span className="menu-balance">💰 Баланс: {userBalance} ₽</span>
+                      </div>
                     </div>
                   </div>
+                  <div className="menu-divider"></div>
+                  <div className="menu-group">
+                    <button className="menu-item" onClick={() => navigateTo('profile')}>👤 Profile</button>
+                    <button className="menu-item">⚙️ Settings</button>
+                    <button className="menu-item" onClick={() => { navigateTo('updates'); closeMenu(); }}>
+                      🚀 Changelog
+                    </button>
+                  </div>
+                  <div className="menu-divider"></div>
+                  <div className="menu-section-label">Latest News</div>
+                  <div className="menu-news-list">
+                    {news.map(item => (
+                      <div key={item.id} className="news-card">
+                        <p>{item.title}</p>
+                        <span>{item.date}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="menu-divider"></div>
+                  <button className="menu-item logout-red" onClick={handleLogout}>Sign out</button>
                 </div>
-                <div className="menu-divider"></div>
-                <div className="menu-group">
-                  <button className="menu-item">👤 Profile</button>
-                  <button className="menu-item">⚙️ Settings</button>
-                  <button className="menu-item" onClick={() => navigateTo('updates')}>
-                    🚀 Changelog
-                  </button>
-                </div>
-                <div className="menu-divider"></div>
-                <div className="menu-section-label">Latest News</div>
-                <div className="menu-news-list">
-                  {news.map(item => (
-                    <div key={item.id} className="news-card">
-                      <p>{item.title}</p>
-                      <span>{item.date}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="menu-divider"></div>
-                <button className="menu-item logout-red">Sign out</button>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          ) : (
+            <button 
+              className={`nav-link-btn ${currentPage === 'auth' ? 'active' : ''} auth-highlight`} 
+              onClick={() => navigateTo('auth')}
+            >
+              Войти
+            </button>
+          )}
         </div>
       </nav>
 
       <main className="fade-in">
-        {currentPage === 'home' ? (
+        
+        {currentPage === 'home' && (
           <>
             <header className="hero">
               <div className="status-label">● Connection: Secure</div>
-              <h1>Твой интернет — твои правила</h1>
+              <h1>Твой internet — твои правила</h1>
               <p>Максимальная скорость и полная анонимность для нового поколения.</p>
               <button className="main-buy-btn" onClick={() => document.getElementById('pricing')?.scrollIntoView({behavior: 'smooth'})}>
                 КУПИТЬ ДОСТУП
@@ -104,34 +207,64 @@ function App() {
             <section className="pricing-section" id="pricing">
               <h2 className="section-title">Выбери свой тариф</h2>
               <div className="pricing-grid">
+                
+                {/* КАРТОЧКА: ПРОБНЫЙ - 0 ₽ */}
                 <div className="price-card-v2">
                   <h3 className="card-plan-title">Пробный</h3>
                   <div className="card-price">0 ₽<span>/3 дня</span></div>
-                  <button className={`card-btn-outline ${loadingPlan === 'Пробный' ? 'loading' : ''}`} onClick={() => handlePlanClick('Пробный')}>
+                  {/* МЕНЯЕМ handlePlanClick на purchasePlan */}
+                  <button 
+                    className={`card-btn-outline ${loadingPlan === 'Пробный' ? 'loading' : ''}`} 
+                    onClick={() => purchasePlan('Пробный', 0)}
+                  >
                     {loadingPlan === 'Пробный' ? 'Загрузка...' : 'Попробовать'}
                   </button>
                 </div>
+
+                {/* КАРТОЧКА: ГОДОВОЙ - 199 ₽ */}
                 <div className="price-card-v2 featured">
                   <div className="badge-top pulse">TOP</div>
                   <h3 className="card-plan-title">Годовой</h3>
                   <div className="card-price">199 ₽<span>/мес</span></div>
-                  <button className={`card-btn-solid ${loadingPlan === 'Годовой' ? 'loading' : ''}`} onClick={() => handlePlanClick('Годовой')}>
+                  {/* МЕНЯЕМ handlePlanClick на purchasePlan */}
+                  <button 
+                    className={`card-btn-solid ${loadingPlan === 'Годовой' ? 'loading' : ''}`} 
+                    onClick={() => purchasePlan('Годовой', 199)}
+                  >
                     {loadingPlan === 'Годовой' ? 'Обработка...' : 'Выбрать план'}
                   </button>
                 </div>
+
+                {/* КАРТОЧКА: МЕСЯЧНЫЙ - 349 ₽ */}
                 <div className="price-card-v2">
                   <h3 className="card-plan-title">Месячный</h3>
                   <div className="card-price">349 ₽<span>/мес</span></div>
-                  <button className={`card-btn-outline ${loadingPlan === 'Месячный' ? 'loading' : ''}`} onClick={() => handlePlanClick('Месячный')}>
+                  {/* МЕНЯЕМ handlePlanClick на purchasePlan */}
+                  <button 
+                    className={`card-btn-outline ${loadingPlan === 'Месячный' ? 'loading' : ''}`} 
+                    onClick={() => purchasePlan('Месячный', 349)}
+                  >
                     {loadingPlan === 'Месячный' ? 'Загрузка...' : 'Купить'}
                   </button>
                 </div>
+
               </div>
             </section>
           </>
-        ) : (
+        )}
+
+        {currentPage === 'updates' && (
           <Updates changelog={changelog} />
         )}
+
+        {currentPage === 'auth' && (
+          <Auth onAuthSuccess={handleAuthSuccess} />
+        )}
+
+        {currentPage === 'profile' && (
+          <Profile userEmail={userEmail} navigateTo={navigateTo} />
+        )}
+
       </main>
 
       <footer className="footer">
