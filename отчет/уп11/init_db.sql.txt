@@ -1,0 +1,14 @@
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,                                      -- Уникальный ID (автоинкремент)
+    email VARCHAR(255) UNIQUE NOT NULL,                        -- Почта пользователя (уникальная)
+    password_hash VARCHAR(255) NOT NULL,                        -- Хэш пароля для безопасности
+    balance INT DEFAULT 0 CHECK (balance >= 0),                 -- Баланс кошелька (не может быть отрицательным)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP              -- Дата и время регистрации (ставится автоматически)
+);
+
+CREATE TABLE payments (
+    payment_id SERIAL PRIMARY KEY,                              -- ID платежа
+    user_id INT NOT NULL,                                       -- ID пользователя, который совершил платеж
+    amount INT NOT NULL CHECK (amount > 0),                     -- Сумма пополнения
+    status VARCHAR(50) DEFAULT 'Успешно',                       -- Статус транзакции
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,             -- Время платежа
